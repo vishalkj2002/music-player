@@ -8,17 +8,25 @@ const Track = ({ isPlaying, isActive, activeSong }) => (
 			} hidden sm:block h-16 w-16 mr-4`}
 		>
 			<img
-				src={activeSong?.images?.coverart}
-				alt="cover art"
+				src={
+					activeSong.attributes?.artwork?.url?.includes("{w}x{h}")
+						? activeSong.attributes.artwork.url.replace("{w}x{h}", "500x500")
+						: activeSong.attributes?.artwork?.url
+				}
+				alt={activeSong.attributes?.name}
 				className="rounded-full"
 			/>
 		</div>
 		<div className="w-[50%]">
 			<p className="truncate text-white font-bold text-lg">
-				{activeSong?.title ? activeSong?.title : "No active Song"}
+				{activeSong?.attributes?.name
+					? activeSong?.attributes?.name
+					: "No active Song"}
 			</p>
 			<p className="truncate text-gray-300">
-				{activeSong?.subtitle ? activeSong?.subtitle : "No active Song"}
+				{activeSong?.attributes?.artistName
+					? activeSong?.attributes?.artistName
+					: "No active Song"}
 			</p>
 		</div>
 	</div>
