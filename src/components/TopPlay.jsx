@@ -6,48 +6,16 @@ import { FreeMode } from "swiper/modules";
 
 import PlayPause from "./PlayPause";
 import { playPause, setActiveSong } from "../redux/features/playerSlice";
-import { useGetTopChartsQuery, useGetArtistDetailsQuery } from "../redux/services/shazamCore";
-
-import placeholderImage from "../assets/placeholder.jpg"
+import { useGetTopChartsQuery } from "../redux/services/shazamCore";
 
 import "swiper/css";
 import "swiper/css/free-mode";
 
-const TopChartCard = ({song, i}) => (
+const TopChartCard = ({ song, i }) => (
 	<div className="w-full flex flex-row items-center hover:bg-[#4c426e] py-2 p-4 rounded-lg cursor-pointer mb-2">
 		{song.attributes.name}
 	</div>
-)
-
-const ArtistImage = ({ artistId, alt }) => {
-	const { data, isLoading, error } = useGetArtistDetailsQuery(artistId);
-
-	const artistImg = data?.data?.[0]?.avatar;
-
-	if (isLoading)
-		return (
-			<div className="w-full h-full bg-gray-300 rounded-full flex items-center justify-center">
-				Loading...
-			</div>
-		);
-	if (error)
-		return (
-			<div className="w-full h-full bg-red-300 rounded-full flex items-center justify-center">
-				Error
-			</div>
-		);
-
-	return (
-		<img
-			src={
-				artistImg ||
-				"https://via.placeholder.com/150/cccccc/000000?text=No+Image"
-			}
-			alt={alt}
-			className="rounded-full object-cover w-full h-full"
-		/>
-	);
-};
+);
 
 const TopPlay = () => {
 	const dispatch = useDispatch();
@@ -98,11 +66,26 @@ const TopPlay = () => {
 					</Link>
 				</div>
 
-				<Swiper slidesPerView="auto" spaceBetween={15} freeMode centeredSlides centeredSlidesBounds modules={[FreeMode]} className="mt-4">
+				<Swiper
+					slidesPerView="auto"
+					spaceBetween={15}
+					freeMode
+					centeredSlides
+					centeredSlidesBounds
+					modules={[FreeMode]}
+					className="mt-4"
+				>
 					{topPlays?.map((song, i) => (
-						<SwiperSlide key={song?.id} style={{width: '25%', height: 'auto'}} className="shadow-lg rounded-full animate-slideright">
+						<SwiperSlide
+							key={song?.id}
+							style={{ width: "25%", height: "auto" }}
+							className="shadow-lg rounded-full animate-slideright"
+						>
 							<Link to={`/artists/${song?.relationships.artists.data[0].id}`}>
-								<ArtistImage artistId={song?.relationships.artists.data[0].id} alt={song?.attributes?.artistName} />
+								<ArtistImage
+									artistId={song?.relationships.artists.data[0].id}
+									alt={song?.attributes?.artistName}
+								/>
 							</Link>
 						</SwiperSlide>
 					))}
